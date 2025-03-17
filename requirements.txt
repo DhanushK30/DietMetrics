@@ -102,6 +102,7 @@ markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 matplotlib==3.7.5
 matplotlib-inline==0.1.7
+maturin==1.0.0 --only-binary=:all:
 mdurl==0.1.2
 microapp==0.3.15
 mistune==3.1.1
