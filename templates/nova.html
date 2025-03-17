@@ -1,0 +1,204 @@
+<! -- Nova page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ingredient Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+
+        .navbar h1 {
+            font-size: 3em;
+            color: #0047ab;
+        }
+
+        .highlight {
+            color: #ff6347;
+            font-weight: bold;
+        }
+
+        .fi-container {
+            background: linear-gradient(to bottom, #0047ab, #003b8b);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            color: white;
+        }
+
+        .fi-container h1, .fi-container h3, label {
+            text-align: center;
+        }
+
+        .fi-container input[type="text"], .fi-container input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .fi-btn1, .fi-btn2 {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #2575fc;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .fi-btn1:hover, .fi-btn2:hover {
+            background: #1b5fc0;
+        }
+
+        .profile-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-icon a {
+            color: #0047ab;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #result {
+            font-size: 120%; /* 20% larger */
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        function classifyIngredients() {
+            var ingredients = document.getElementById("ingredients").value;
+            fetch("/predict_nova", {
+                method: "POST",
+                body: new URLSearchParams({ "ingredients": ingredients }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultElement = document.getElementById("result");
+                let prediction = data.prediction;
+
+                // Class Labels
+                let classLabels = {
+                        1: "Unprocessed or minimally processed foods",
+                        2: "Processed culinary ingredients",
+                        3: "Processed foods",
+                        4: "Ultra-processed foods"
+                };
+
+                // Color Mapping
+                let colorMap = {
+                    1: "#00b300",  // Green
+                    2: "#ffcc00",  // Yellow
+                    3: "#ff9900",  // Orange
+                    4: "#ff0000"   // Red
+                };
+
+                resultElement.innerText = `Class: ${prediction} (${classLabels[prediction]})`;
+                resultElement.style.color = colorMap[prediction] || "white";
+            });
+        }
+
+        function processOCR() {
+            var formData = new FormData();
+            var imageFile = document.getElementById("imageUpload").files[0];
+
+            if (!imageFile) {
+                alert("Please upload an image.");
+                return;
+            }
+
+            formData.append("image", imageFile);
+
+            fetch("/ocr", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById("extractedText").innerText = "Extracted Text: " + data.extracted_text;
+                    let resultElement = document.getElementById("result");
+                    let prediction = data.prediction;
+
+                    let classLabels = {
+                        1: "Unprocessed or minimally processed foods",
+                        2: "Processed culinary ingredients",
+                        3: "Processed foods",
+                        4: "Ultra-processed foods"
+                    };
+
+                    let colorMap = {
+                        1: "#00b300",
+                        2: "#ffcc00",
+                        3: "#ff9900",
+                        4: "#ff0000"
+                    };
+
+                    resultElement.innerText = `Class: ${prediction} (${classLabels[prediction]})`;
+                    resultElement.style.color = colorMap[prediction] || "white";
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <h1><span class="highlight">D</span>iet <span class="highlight">M</span>etrics</h1>
+    </div>
+
+    <div class="fi-container">
+        <h1>Food Ingredient Classifier</h1>
+        <label>Enter Ingredients:</label>
+        <input type="text" id="ingredients" placeholder="Enter ingredients..."/>
+        <button type="button" class="fi-btn1" onclick="classifyIngredients()">Classify</button>
+
+        <h1>Upload Image for OCR</h1>
+        <input type="file" id="imageUpload" accept="image/*" placeholder="file" />
+        <button type="button" class="fi-btn2" onclick="processOCR()">Extract & Classify</button>
+
+        <p id="extractedText"></p>
+        <p id="result"></p>
+    </div>
+    
+</body>
+</html>

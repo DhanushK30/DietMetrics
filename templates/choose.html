@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: white;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            font-style: normal;
+            font-weight: normal;
+            position:fixed;
+            top: 13%;
+            left:45%
+            
+        }
+        h1 span {
+            color: #0078ff;
+            font-weight:bolder;
+            font-style: italic;
+            font-size: 50px;
+            font-family: sans-serif;
+            position:fixed;
+            top: 20%;
+            left:40%
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .feature-box {
+            background: #f8f8f8;
+            border-radius: 15px;
+            text-align: center;
+            width: 370px;
+            padding: 0px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            gap: 40px;
+            position:fixed;
+            bottom: 20%;
+            left:18%;
+            
+        }
+        .feature-box1 {
+            background: #f8f8f8;
+            border-radius: 15px;
+            text-align: center;
+            width: 370px;
+            padding: 0px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            position:fixed;
+            bottom: 20%;
+            right:17%;
+            
+        }
+        .feature-box:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+
+        }
+        .feature-box1:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+
+        }
+        .feature-box img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .feature-box1 img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .feature-box p {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .feature-box1 p {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .button-container {
+            margin-top: 30px;
+        }
+        .button {
+            background: #0078ff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #005bb5;
+        }
+        .comment{
+            font-family: sans-serif;
+            font-size:large;
+            position:fixed;
+            top: 80%;
+            left: 23% 
+
+        }
+        .comment1{
+            font-family: sans-serif;
+            font-size:large;
+            position:fixed;
+            top: 80%;
+            left: 63% 
+
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to</h1>
+   <h1> <span>Diet Metrics</span></h1>
+    <div class="container">
+        <div class="feature-box">
+            <a href="/nova">
+                <img src="{{ url_for('static', filename='nova_img.png') }}" alt="Predict NOVA">
+            </a>
+
+        </div>
+        <div class="comment">    
+        <p>Predict NOVA level for Food</p>
+    </div>
+        <div class="feature-box1">
+            <a href="/score">
+                <img src="{{ url_for('static', filename='nutri_img.png') }}" alt="Predict Nutri-Score">
+            </a>
+        </div>
+        <div class="comment1">    
+            <p>Predict Nutri-Score for Food</p>
+        </div>
+        <p></p>
+       
+    </div>
+    
+</body>
+</html>
