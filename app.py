@@ -6,6 +6,21 @@ import torch
 import pytesseract
 from PIL import Image
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
+import os
+import requests
+
+MODEL_PATH = "distilbert_food_classifier.pth"
+MODEL_URL = "https://huggingface.co/DhanushK30/DietMetrics-Models/resolve/main/distilbert_food_classifier.pth"
+
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        print("Downloading model from Hugging Face...")
+        response = requests.get(MODEL_URL)
+        with open(MODEL_PATH, 'wb') as f:
+            f.write(response.content)
+        print("Model downloaded.")
+
+download_model()
 
 app = Flask(__name__, static_folder='static')
 
@@ -22,7 +37,7 @@ MODEL_PATH = "distilbert_food_classifier.pth"
 MODEL_NAME = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(MODEL_NAME)
 model_nova = DistilBertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=4)
-model_nova.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device("cpu"), weights_only=True))
+model_nova.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device("cpu")))
 model_nova.eval()
 
 FEATURES = [
