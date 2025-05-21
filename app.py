@@ -178,4 +178,6 @@ def ocr():
 
 if __name__ == '__main__':
     # For local development. Gunicorn will be used in production.
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    # Render will provide the PORT environment variable.
+    port = int(os.environ.get('PORT', 8080)) # Use 8080 as default for local if PORT not set
+    app.run(debug=False, host='0.0.0.0', port=port) # Set debug=False
